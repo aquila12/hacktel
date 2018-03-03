@@ -4,10 +4,6 @@ module Codes
   ESC="\x1b"
   CS="\x0c"
 
-  def self.escape(char)
-    ESC + char
-  end
-
   def self.move(where)
     case where
     when :left, :backward, :back; "\x08"
@@ -28,24 +24,24 @@ module Codes
     end
   end
 
-  Conceal = escape 'X'
-  BlackBackground = escape "\x5c"
-  NewBackground = escape "\x5d"
+  Conceal = ESC + 'X'
+  BlackBackground = ESC + '\\'
+  NewBackground = ESC + ']'
 
   def self.cursor(flag)
     on_off( "\x11", "\x14" )
   end
 
   def self.double_height(flag)
-    on_off escape('M'), escape('L')
+    ESC + on_off('M','L')
   end
 
   def self.flash(flag)
-    on_off escape('H'), escape('I')
+    ESC + on_off('H','I')
   end
 
   def self.hold_mosaics(flag)
-    on_off escape('^'), escape('_')
+    ESC + on_off('^','_')
   end
 
   def self.colour_select_char(colour, characters)
@@ -65,10 +61,10 @@ module Codes
   end
 
   def self.alphanumeric(colour)
-    escape colour_select_char( colour, '@ABCDEFG' )
+    ESC + colour_select_char( colour, '@ABCDEFG' )
   end
 
   def self.mosaic(colour)
-    escape colour_select_char( colour, 'PQRSTUVW' )
+    ESC + colour_select_char( colour, 'PQRSTUVW' )
   end
 end
