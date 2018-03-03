@@ -5,6 +5,7 @@ require_relative 'codes'
 require_relative 'header_generator'
 require_relative 'native_renderer'
 require_relative 'raw_renderer'
+require_relative 'edit_tf'
 
 PAGEDIR=ARGV.shift
 RENDER_ORDER=['vdat','fram']
@@ -69,6 +70,7 @@ while(true)
     hdr = HeaderGenerator.make_header(pf, 0)
     data = HeaderGenerator.splice_header(hdr, data)
 
+    STDERR.puts "Edit: #{EditTF.uri(data)}"
     STDOUT.write Codes::CS + data
   end
 
