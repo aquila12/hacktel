@@ -3,6 +3,8 @@
 
 require_relative 'codes'
 require_relative 'header_generator'
+require_relative 'native_renderer'
+require_relative 'raw_renderer'
 
 PAGEDIR=ARGV.shift
 RENDER_ORDER=['vdat','fram']
@@ -12,22 +14,19 @@ unless PAGEDIR
   exit 1
 end
 
-$renderers = {}
-
-# Raw viewdata format
-$renderers['vdat'] = Proc.new { |data| data }
-
-# Raw frame format with extraneous newlines, and possibly extra line at the bottom
-$renderers['fram'] = Proc.new do |data|
-  data.split("\x0a")[0..23].join.bytes.map do |c|
-    (c < 32) ? [27, c + 64] : c
-  end.flatten.pack('c*')
-end
+$renderers = {
+  'vdat' => NativeRenderer.new,
+  'fram' => RawRenderer.new( 0x00..0x1f ),
+  'raw0' => RawRenderer.new( 0x00..0x1f ),
+  'raw2' => RawRenderer.new( 0x80..0x9f ),
+}
 
 def renderFile(filename)
-  RENDER_ORDER.each do |ext|
+  $renderers.each do |ext, renderer|
     begin
-      return $renderers[ext].call(File.read("#{PAGEDIR}/#{filename}.#{ext}").force_encoding(Encoding::BINARY))
+      data = File.read("#{PAGEDIR}/#{filename}.#{ext}").force_encoding(Encoding::BINARY)
+
+      return renderer.render(data)
     rescue Errno::ENOENT
       next
     end
