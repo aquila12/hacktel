@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 # H A C K T E L server
 
+require_relative 'codes'
+require_relative 'header_generator'
+
 PAGEDIR=ARGV.shift
 RENDER_ORDER=['vdat','fram']
 
@@ -39,10 +42,6 @@ def clearKeypresses
   end
 end
 
-def ctrl(key)
-  (key.ord - 64).chr
-end
-
 STDOUT.binmode
 STDOUT.sync = true
 
@@ -60,7 +59,7 @@ while(true)
       msg = "No frame at #{pf}!"
       STDERR.puts msg
       # TODO: Try the last page
-      STDOUT.write ctrl('L') + "404: #{msg}"
+      STDOUT.write Codes::CS + "404: #{msg}"
     else
       frame='a'
       next
@@ -68,26 +67,10 @@ while(true)
   end
 
   if data
-    # Generate the header line
-    logotext = 'HACKTEL'
-    logoctrl = 'ACBDEAC'
-    logo = logotext.chars.zip(logoctrl.chars).map do |t,c|
-      "\x1b" + c + t
-    end.join
+    hdr = HeaderGenerator.make_header(pf, 0)
+    data = HeaderGenerator.splice_header(hdr, data)
 
-    time = Time.now.strftime('%d %b %H:%M')
-
-    pence = 0
-    header = logo + "\x1b\x43 " + time.ljust(12) + "\x1b\x47" + pf.ljust(7) + "\x1b\x43" + (pence.to_s + "p").rjust(3) + "\x0d"
-
-    firstnl = data.index("\x0a")
-    if !firstnl || (firstnl > 39)
-      data = header + data[40..-1]
-    else
-      data = header + data[(firstnl+1)..-1]
-    end
-
-    STDOUT.write ctrl('L') + data
+    STDOUT.write Codes::CS + data
   end
 
   # Input bit
