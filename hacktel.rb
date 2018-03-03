@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # H A C K T E L server
 
+require 'io/console'
+
 require_relative 'codes'
 require_relative 'header_generator'
 require_relative 'native_renderer'
@@ -78,9 +80,11 @@ while(true)
   clearKeypresses
   c = nil
   begin
-    c = STDIN.getc
+    c = STDIN.getch
     STDERR.puts "Key: #{c}"
     case c
+    when "\u0003"   # CTRL+C
+      exit 0
     when '_'        # Enter
       frame.next!
     when ('0'..'7') # Number press
