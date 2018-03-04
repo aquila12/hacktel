@@ -10,7 +10,7 @@ require_relative 'raw_renderer'
 require_relative 'edit_tf'
 
 PAGEDIR=ARGV.shift
-RENDER_ORDER=['vdat','fram']
+HOME=ARGV.shift || '1'
 
 unless PAGEDIR
   STDERR.puts "No pagedir specified"
@@ -47,7 +47,7 @@ end
 STDOUT.binmode
 STDOUT.sync = true
 
-page='1'
+page=HOME
 frame='a'
 while(true)
   pf = page + frame
@@ -57,11 +57,10 @@ while(true)
   unless data
     if frame == 'a'
       data = renderFile("notfound") unless data
+      data = "404: #{msg}" unless data
 
       msg = "No frame at #{pf}!"
       STDERR.puts msg
-      # TODO: Try the last page
-      STDOUT.write Codes::CS + "404: #{msg}"
     else
       frame='a'
       next
@@ -81,21 +80,20 @@ while(true)
   c = nil
   begin
     c = STDIN.getch
-    STDERR.puts "Key: #{c}"
+    STDERR.puts "Key: #{c.inspect}"
+
     case c
-    when "\u0003"   # CTRL+C
-      exit 0
-    when '_'        # Enter
-      frame.next!
-    when ('0'..'7') # Number press
+    when "\u0003";    exit 0      # CTRL+C: quit
+    when '_';         frame.next! # Enter:  next frame in page
+    when ('0'..'7')               # Number press - navigate
       page += c
       frame = 'a'
-    when '8'
-      page = '1'
+    when '8'                      # 8 - home
+      page = HOME
       frame = 'a'
     when '9'
-      page = page[0..-2]
-      page = "1" if page.empty?
+      page = page[0..-2]          # Drop the last character
+      page = HOME if page.empty?
       frame = 'a'
     else
       c = nil
