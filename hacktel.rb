@@ -79,7 +79,7 @@ while(true)
   clearKeypresses
   c = nil
   begin
-    c = STDIN.getch
+    c = ( STDIN.tty? ? STDIN.getch : STDIN.getc )
     STDERR.puts "Key: #{c.inspect}"
 
     case c
