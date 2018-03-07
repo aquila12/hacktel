@@ -1,5 +1,5 @@
-
-
+                                        
+                                        
 other, and as long as they set their    
 modems correctly, information could be  
 transferred half-duplex. Bulletin       
@@ -7,19 +7,19 @@ boards could be run on systems such as
 the BBC Micro, and would present        
 themselves in the same manner as an IP. 
                                         
-The modem standard – v.23 – used        
+The modem standard - v.23 - used        
 for viewdata is asymmetric. The forward 
 channel (download) runs at 1200 bits    
 per second (120 characters per second   
 taking framing into account), while the 
 reverse channel (upload) runs at 75     
 bits per second (7.5 characters per     
-second). A terminal – apart from any    
-storage functionality – is relatively   
-“dumb”, and transmits key presses       
+second). A terminal - apart from any    
+storage functionality - is relatively   
+"dumb", and transmits key presses       
 immediately. The information            
-provider’s system reacts as needed      
-– whether this means sending a new      
+provider's system reacts as needed      
+- whether this means sending a new      
 Spectrum Hacking    `~`~`~`~`~
 Section Menu: 8    x x x x x 
                                         
