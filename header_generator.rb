@@ -2,7 +2,7 @@ require_relative 'codes'
 
 module HeaderGenerator
   logotext = 'HACKTEL'
-  logocols = [ :red :yellow :green :blue :magenta :red :yellow ]
+  logocols = [ :red, :yellow, :green, :blue, :magenta, :red, :yellow ]
   LOGO = logotext.chars.zip(logocols).map do |t,c|
     Codes.alphanumeric(c) + t
   end.join
