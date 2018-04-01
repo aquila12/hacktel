@@ -19,9 +19,10 @@ end
 
 $renderers = {
   'vdat' => NativeRenderer.new,
-  'fram' => RawRenderer.new( 0x00..0x1f ),
-  'raw0' => RawRenderer.new( 0x00..0x1f ),
-  'raw2' => RawRenderer.new( 0x80..0x9f ),
+  'fram' => RawRenderer.new( control_range: 0x00..0x1f ),
+  'raw0' => RawRenderer.new( control_range: 0x00..0x1f ),
+  'raw2' => RawRenderer.new( control_range: 0x80..0x9f ),
+  '1000' => RawRenderer.new( control_range: 0x00..0x1f, insert_line_returns: true ),
 }
 
 def renderFile(filename)
