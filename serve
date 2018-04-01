@@ -1,10 +1,10 @@
 #!/bin/sh
 # Emulate a V.23 server with hacktel attached
 
-. v23-config
+. ./v23-config
 
 OPTIONS="-D${DEVICE}"
 
-./v23 -md -cb -f10dddddddP1 -e'?' -A6 |
+./v23 -md -cb -f10dddddddP1 -e'?' -A6 $OPTIONS |
 ./hacktel.rb "$@" |
-./v23 -mm -cf -f10dddddddP1
+./v23 -mm -cf -f10dddddddP1 $OPTIONS
